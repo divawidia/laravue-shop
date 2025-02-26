@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\AdminAuthController;
 use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -34,7 +35,12 @@ Route::prefix('admin')->name('admin.')->group(function () {
     });
 
     Route::middleware(['auth', 'admin'])->group(function () {
-        Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');
+        Route::get('dashboard', [AdminController::class, 'index'])->name('dashboard');
+
+        Route::prefix('products')->name('products.')->group(function () {
+            Route::get('', [ProductController::class, 'index'])->name('index');
+        });
+
     });
 });
 
