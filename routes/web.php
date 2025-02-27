@@ -39,6 +39,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
         Route::prefix('products')->name('products.')->group(function () {
             Route::get('', [ProductController::class, 'index'])->name('index');
+            Route::post('store', [ProductController::class, 'store'])->name('store');
         });
 
     });
