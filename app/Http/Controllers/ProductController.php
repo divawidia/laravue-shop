@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ProductRequest;
 use App\Models\Product;
+use App\Models\ProductImage;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -30,9 +32,19 @@ class ProductController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(ProductRequest $request)
     {
-        //
+        $data = $request->validated();
+        $product = Product::create($data);
+
+        if (array_key_exists('images', $data)) {
+            foreach ($data['images'] as $image) {
+                $image_path = $image->store('product_images', 'public');
+                $product->images()->create($image_path);
+            }
+        }
+
+        return redirect()->route('admin.products.index')->with('success', 'Product created successfully.');
     }
 
     /**
