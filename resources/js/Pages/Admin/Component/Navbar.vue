@@ -1,3 +1,24 @@
+<script setup>
+import { Link } from "@inertiajs/vue3";
+import { ref, onMounted } from 'vue'
+
+const isDark = ref(localStorage.getItem("theme") === "dark");
+
+const toggleDarkMode = () => {
+    isDark.value = !isDark.value;
+    document.documentElement.classList.toggle("dark", isDark.value);
+    localStorage.setItem("theme", isDark.value ? "dark" : "light");
+};
+
+// initialize components based on data attribute selectors
+onMounted(() => {
+    if (localStorage.getItem("theme") === "dark") {
+        document.documentElement.classList.add("dark");
+        isDark.value = true;
+    }
+})
+</script>
+
 <template>
     <nav class="bg-white border-b border-gray-200 px-4 py-2.5 dark:bg-gray-800 dark:border-gray-700 fixed left-0 right-0 top-0 z-50">
         <div class="flex flex-wrap justify-between items-center">
@@ -589,6 +610,38 @@
                         </a>
                     </div>
                 </div>
+
+                <button
+                    @click="toggleDarkMode"
+                    class="p-2 rounded-md transition-colors"
+                    :class="isDark ? 'bg-gray-800 text-white' : 'bg-gray-200 text-black'"
+                >
+                    <svg
+                        v-if="isDark"
+                        class="w-6 h-6"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg"
+                    >
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M12 3v1m0 16v1m8.485-8.485h1M3.515 12.515h-1m15.071 6.364l-.707-.707M5.636 5.636l-.707-.707m12.728 12.728l.707.707M6.343 17.657l-.707.707M12 5.25a6.75 6.75 0 100 13.5 6.75 6.75 0 000-13.5z">
+                        </path>
+                    </svg>
+
+                    <svg
+                        v-else
+                        class="w-6 h-6"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg"
+                    >
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M12 3v1m0 16v1m8.485-8.485h1M3.515 12.515h-1m15.071 6.364l-.707-.707M5.636 5.636l-.707-.707m12.728 12.728l.707.707M6.343 17.657l-.707.707M12 5.25a6.75 6.75 0 000 13.5A6.75 6.75 0 0112 5.25z">
+                        </path>
+                    </svg>
+                </button>
                 <button
                     type="button"
                     class="flex mx-3 text-sm bg-gray-800 rounded-full md:mr-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
@@ -732,7 +785,4 @@
     </nav>
 </template>
 
-<script setup>
-import { Link } from "@inertiajs/vue3";
 
-</script>
